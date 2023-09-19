@@ -1,22 +1,7 @@
-# MetaMask Test Dapp
+# MetaMask Utilities
 
-This is a simple test dapp for use in MetaMask e2e tests and manual QA.
-
-Currently hosted [here](https://metamask.github.io/test-dapp/).
-
-## Usage
-
-If you wish to use this dapp in your e2e tests, install this package and set up a script of e.g. the following form:
-
-```shell
-static-server node_modules/@metamask/test-dapp/dist --port 9011
-```
-
-The main page of the test dapp includes a simple UI featuring buttons for common dapp interactions.
-
-There is a second page (`request.html`) that allows making requests directly to the provider using query parameters. This provides a simple way of testing RPC methods using an in-page provider.
-
-It can be used by navigating to `/request.html?method=${METHOD}&params=${PARAMS}` (e.g. `/request.html?method=eth_getLogs&params=[{ "address": "0x0000000000000000000000000000000000000000" }]`). The page will make a request with the given RPC method and parameters using `ethereum.request`, and report the result as plain text.
+This is a simple utility app providing an interface UI to sign and broadcast messages.
+The application is forked from [MetaMask e2e tests dap repo](https://metamask.github.io/test-dapp/).
 
 ## Contributing
 
@@ -28,15 +13,30 @@ It can be used by navigating to `/request.html?method=${METHOD}&params=${PARAMS}
 - Run `yarn setup` to install dependencies and run any required post-install scripts
   - **Warning:** Do not use the `yarn` / `yarn install` command directly. Use `yarn setup` instead. The normal install command will skip required post-install scripts, leaving your development environment in an invalid state.
 
+**Note:** `sha3` package setup does not really play well with `python 3.11.1` and the `setup` script throws errors. You can run the following to downgrade your python version:
+
+```shell
+> pyenv install 3.10
+> pyenv global 3.10
+> eval "$(pyenv init --path)"
+> python3 --version
+```
+
+### Running locally
+
+In order to run the project locally, run
+
+```shell
+> yarn start
+```
+
+and go to http://localhost:9011/
+
 ### Testing and Linting
 
 Run `yarn lint` to run the linter, or run `yarn lint:fix` to run the linter and fix any automatically fixable issues.
 
 This package has no tests.
-
-### Deploying
-
-After merging or pushing to `main`, please run `yarn deploy` in the package root directory if the contents of the `dist/` directory have changed.
 
 ### Development
 
