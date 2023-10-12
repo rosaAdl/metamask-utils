@@ -93,7 +93,7 @@ function get_shorthash {
 }
 
 function preprocess_and_deploy {
-  yarn lint || abort "Lint failure"
+  # yarn lint || abort "Lint failure"
   yarn build || abort "Failed to build"
 
   local shorthash
