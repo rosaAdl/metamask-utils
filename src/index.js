@@ -1,6 +1,9 @@
 import MetaMaskOnboarding from '@metamask/onboarding';
 // eslint-disable-next-line camelcase
 import { ethers, utils } from 'ethers';
+import rj from 'renderjson';
+
+import decoder from './abi-decoding-utils/encoder-decoder';
 
 const currentUrl = new URL(window.location.href);
 const forwarderOrigin =
@@ -39,6 +42,18 @@ const restfulRawDataInput = document.getElementById('restfulRawDataInput');
 const slateSign = document.getElementById('signSlateTxButton');
 const slateSignResult = document.getElementById('slateSignResult');
 const rawSlateTx = document.getElementById('rawSlateTx');
+
+// Decoder:
+const abiInput = document.getElementById('abis');
+const txRawHexInput = document.getElementById('txRawHex');
+const bytecodeInput = document.getElementById('bytecode');
+const contractCreationDecoderButton = document.getElementById(
+  'decodeContractCreation',
+);
+const decodeMethodCallButton = document.getElementById('decodeMethodCall');
+const decodedResultRenderer = document.getElementById('jsonRender');
+const decodeErrors = document.getElementById('getDecodeErrors');
+const decodeErrorWrapper = document.getElementById('decodeErrorWrapper');
 
 const initialize = async () => {
   let onboarding;
@@ -100,6 +115,108 @@ const initialize = async () => {
       onboardButton.innerText = 'Connect';
       onboardButton.onclick = onClickConnect;
       onboardButton.disabled = false;
+    }
+  };
+
+  /**
+   * Contract Creation Decode
+   */
+  const abiInputToJsonObj = (abiVal) => {
+    const sanitizedAbi = abiVal.trim().replace(/(\r\n|\n|\r)/gm, '');
+    try {
+      console.log(sanitizedAbi);
+      return JSON.parse(sanitizedAbi);
+    } catch (err) {
+      // Now try it with adding quotes:
+      const abiJsonStr = sanitizedAbi
+        .replace(/(\w+:)|(\w+ :)/g, function (matchedStr) {
+          return `'${matchedStr.substring(0, matchedStr.length - 1)}':`;
+        })
+        .replace(/(')/gm, '"')
+        .replace(/,([ |\t|\n]+[\}|\]|\)])/g, '$1');
+      console.log(abiJsonStr);
+      return JSON.parse(abiJsonStr);
+      // Here it will throw if the data is not good but we will handle it
+    }
+  };
+
+  const renderDecodedData = (decodedData) => {
+    rj.set_icons('+', '-').set_show_to_level(2);
+    if (decodedResultRenderer.childElementCount === 0) {
+      decodedResultRenderer.appendChild(rj(decodedData));
+    } else {
+      decodedResultRenderer.replaceChildren(rj(decodedData));
+    }
+  };
+
+  const handleDecodeErrors = (err) => {
+    decodeErrors.innerHTML = `Error: ${err.message}`;
+    decodeErrorWrapper.hidden = false;
+    if (decodedResultRenderer.childElementCount > 0) {
+      decodedResultRenderer.removeChild(decodedResultRenderer.children[0]);
+    }
+  };
+
+  contractCreationDecoderButton.onclick = async () => {
+    // Get values
+    try {
+      decodeErrorWrapper.hidden = true;
+      const abi = abiInput.value.trim();
+      const rawTx = txRawHexInput.value.trim();
+      const bytecode = bytecodeInput.value.trim();
+
+      console.log(abi);
+      // validations TODO:
+      if (abi.length === 0) {
+        throw new Error('Abi is required and it must be a Json string.');
+      }
+
+      if (rawTx.length === 0) {
+        throw new Error(
+          'Transaction data (TX Raw Hex) is mandatory and must start with 0x',
+        );
+      }
+
+      if (bytecode.length === 0) {
+        throw new Error(
+          'To decode contract creation, we need the bytecode of the contract and it must start with 0x',
+        );
+      }
+
+      const decoderForABI = decoder(abiInputToJsonObj(abi));
+      const decodedData = decoderForABI.decodeContractCreation(rawTx, bytecode);
+
+      renderDecodedData({ name: 'constructor', params: decodedData.params });
+    } catch (err) {
+      handleDecodeErrors(err);
+    }
+  };
+
+  decodeMethodCallButton.onclick = async () => {
+    // Get values
+    try {
+      decodeErrorWrapper.hidden = true;
+      const abi = abiInput.value.trim();
+      const rawTx = txRawHexInput.value.trim();
+
+      // validations TODO:
+      if (abi.length === 0) {
+        throw new Error('Abi is required and it must be a Json string.');
+      }
+
+      if (rawTx.length === 0) {
+        throw new Error(
+          'Transaction data (TX Raw Hex) is mandatory and must start with 0x',
+        );
+      }
+
+      // Call Decoder: TODO
+      const decoderForABI = decoder(abiInputToJsonObj(abi));
+      const decodedData = decoderForABI.decodeMethod(rawTx);
+
+      renderDecodedData(decodedData);
+    } catch (err) {
+      handleDecodeErrors(err);
     }
   };
 
