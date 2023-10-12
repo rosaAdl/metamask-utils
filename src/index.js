@@ -369,7 +369,13 @@ const initialize = async () => {
     };
 
     messageSignButton.onclick = async () => {
-      const messageHex = messageToSignInput.value.trim();
+      const messageInput = messageToSignInput.value.trim();
+
+      const messageHex = messageInput.startsWith('0x')
+        ? messageInput
+        : utils.hexlify(
+            utils.toUtf8Bytes(messageInput.replaceAll('\\n', '\n')),
+          );
       try {
         const params = [messageHex, accounts[0]];
         const signature = await ethereum.request({
