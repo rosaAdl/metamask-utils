@@ -1,0 +1,104 @@
+section {
+  margin: 20px 0 20px 0;
+}
+
+.info-text {
+  font-size: 1.1em;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+/* Logo & Header */
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#logo-container {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+#logo-text {
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
+#mm-logo {
+  width: 100%;
+}
+
+/* Encrypt/Decrypt */
+
+#encryptMessageInput {
+  margin-bottom: 1rem;
+}
+
+.error-div {
+  margin-bottom: 12px;
+}
+
+.error-message {
+  min-height: 32px;
+  border: 1px solid #e88f97;
+  color: #24292e;
+  background: #fcf2f3;
+  border-radius: 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px 10px;
+}
+.error-message-icon {
+  margin-right: 8px;
+  flex: 0 0 auto;
+}
+.error-message-text {
+  overflow: auto;
+}
+
+.warning-invisible {
+  display: none;
+}
+
+code, pre { margin-bottom: 30px; font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal; font-size: 14px; color: #222; }
+
+code { padding: 0 3px; background-color: #f2f2f2; border: solid 1px #ddd; }
+
+pre { padding: 20px; overflow: auto; color: #f2f2f2; text-shadow: none; background: #303030; }
+
+pre code { padding: 0; color: #f2f2f2; background-color: #303030; border: none; }
+
+ul, ol, dl { margin-bottom: 20px; }
+
+.renderjson a { text-decoration: none; }
+
+.renderjson .disclosure { color: rgb(241, 241, 237); font-size: 150%; }
+
+.renderjson .syntax { color: grey; }
+
+.renderjson .string { color: rgb(33, 169, 137); }
+
+.renderjson .number { color: rgb(98, 208, 230); }
+
+.renderjson .boolean { color: rgb(233, 157, 233); }
+
+.renderjson .key { color: rgb(138, 210, 67); }
+
+.renderjson .keyword { color: lightgoldenrodyellow; }
+
+.renderjson .object.syntax { color: rgb(237, 221, 177); }
+
+.renderjson .array.syntax { color: rgb(206, 171, 91); }
+
+.highlight .nc { color: plum; font-weight: normal; }
+
+.highlight .nt { color: lightblue; }
