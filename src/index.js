@@ -43,6 +43,11 @@ const slateSign = document.getElementById('signSlateTxButton');
 const slateSignResult = document.getElementById('slateSignResult');
 const rawSlateTx = document.getElementById('rawSlateTx');
 
+// Figment Sign only
+const messageSignButton = document.getElementById('signMessageBtn');
+const messageSignResult = document.getElementById('messageSignResult');
+const messageToSignInput = document.getElementById('messageToSign');
+
 // Decoder:
 const abiInput = document.getElementById('abis');
 const txRawHexInput = document.getElementById('txRawHex');
@@ -67,7 +72,7 @@ const initialize = async () => {
   let accountButtonsInitialized = false;
   let scrollToHandled = false;
 
-  const accountButtons = [restfulSign, slateSign];
+  const accountButtons = [restfulSign, slateSign, messageSignButton];
 
   const isMetaMaskConnected = () => accounts && accounts.length > 0;
 
@@ -349,6 +354,32 @@ const initialize = async () => {
       } catch (err) {
         console.error(err);
         slateSignResult.innerHTML = `Error: ${err.message}`;
+      }
+    };
+
+    messageToSignInput.onkeyup = () => {
+      if (messageSignButton.disabled && messageToSignInput.value.length > 0) {
+        messageSignButton.disabled = false;
+      } else if (
+        !messageSignButton.disabled &&
+        messageToSignInput.value.length === 0
+      ) {
+        messageSignButton.disabled = true;
+      }
+    };
+
+    messageSignButton.onclick = async () => {
+      const messageHex = messageToSignInput.value.trim();
+      try {
+        const params = [messageHex, accounts[0]];
+        const signature = await ethereum.request({
+          method: 'personal_sign',
+          params,
+        });
+        messageSignResult.innerHTML = signature;
+      } catch (err) {
+        console.error(err);
+        messageSignResult.innerHTML = `Error: ${err.message}`;
       }
     };
 

@@ -106,7 +106,7 @@
           <div class="card full-width">
             <div class="card-body">
               <h4 class="card-title">
-                Figment - Sign Validators API
+                Figment - Sign and Broadcast Validators API
               </h4>
               <div class="form-group">
                 <label>From</label>
@@ -161,7 +161,7 @@
         <div class="card full-width">
           <div class="card-body">
             <h4 class="card-title">
-              Figment Sign Slate
+              Figment Sign and Broadcast Slate
             </h4>
 
             <div class="form-group">
@@ -186,6 +186,41 @@
 
             <p class="info-text alert alert-warning">
               Result: <span id="slateSignResult"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12 d-flex align-items-stretch"
+      >
+        <div class="card full-width">
+          <div class="card-body">
+            <h4 class="card-title">
+              Sign Message
+            </h4>
+
+            <div class="form-group">
+              <label>Message Hex</label>
+              <input
+                class="form-control"
+                type="text"
+                placeholder="0x..."
+                id="messageToSign"
+              />
+            </div>
+
+            <div class="form-group">
+              <button
+                class="btn btn-primary btn-lg btn-block mb-3"
+                id="signMessageBtn"
+                disabled
+              >
+                Sign Message
+              </button>
+            </div>
+
+            <p class="info-text alert alert-warning">
+              Result: <span id="messageSignResult"></span>
             </p>
           </div>
         </div>
