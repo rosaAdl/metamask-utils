@@ -291,51 +291,9 @@ const initialize = async () => {
     };
 
     slateSign.onclick = async () => {
-      const DEPOSIT_METHOD_ID = '0x4f498c73';
-      // const slate_payload = '0x02f902d705038459682f008459682f10830155779494a2da805867c962148d3832d9afc512034a62c58901bc16d674ec800000b902a44f498c730000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000001a00000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000030978c820fa5f0f29c1a43825261835914a649039abf5821a2c9beff2d637535902bd55cba29df4726524b4ff09f936eee00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000020010000000000000000000000808894a7fe12a7275a1ecc34d6c0d601d2a3205c000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000060814fe8268b0c72fb536ff92f119275d239c800810e5f6c72b3724affb7f0390f2f8ae0c7e8b11cee37b995aa3b800eed04d723aef528478c3c04c578461316acf1e884140ceeef8de7fe8b9628556b44873d07ea0c3a0f83ead565c1c14aae750000000000000000000000000000000000000000000000000000000000000001c98997f2deaf9cbe47079d43d435f1c0ce210e48886926cb44d09468d5a334d4c0';
       const slatePayload = rawSlateTx.value;
       try {
         const transaction = ethers.utils.parseTransaction(slatePayload);
-
-        const methodId = utils.hexDataSlice(transaction.data, 0, 4);
-        if (methodId !== DEPOSIT_METHOD_ID) {
-          throw new Error(
-            'Deposit transaction should call deposit method for the contract!',
-          );
-        }
-
-        const decodedData = utils.defaultAbiCoder.decode(
-          ['bytes[]', 'bytes[]', 'bytes[]', 'bytes32[]'],
-          utils.hexDataSlice(transaction.data, 4),
-        );
-
-        decodedData.forEach((dataArr) => {
-          decodedData.forEach((otherDataArr) => {
-            if (dataArr.length !== otherDataArr.length) {
-              throw new Error('Deposit data arrays should be of same length!');
-            }
-          });
-        });
-
-        const deposits = [];
-        for (let i = 0; i < decodedData[0].length; i += 1) {
-          deposits.push({
-            validatorPubKey: decodedData[0][i],
-            withdrawalCredentials: decodedData[1][i],
-            signature: decodedData[2][i],
-            depositDataRoot: decodedData[3][i],
-          });
-        }
-
-        const final = {
-          fundingAccountAddress: transaction.from,
-          amount: ethers.utils.formatEther(transaction.value, 'ETH'),
-          contractAddress: transaction.to,
-          deposits,
-        };
-
-        console.log('final', final);
-        console.log('tx', transaction);
 
         const paramsSlate = [
           {
